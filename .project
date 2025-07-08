@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>field_exp</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+		<nature>msi.gama.application.gamaNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>external/Book1.csv</name>
+			<type>1</type>
+			<location>C:/Users/pc/Downloads/Book1.csv</location>
+		</link>
+		<link>
+			<name>external/res2016.csv</name>
+			<type>1</type>
+			<location>C:/Users/pc/Downloads/res2016.csv</location>
+		</link>
+	</linkedResources>
+</projectDescription>
