@@ -11,7 +11,7 @@ model all
 /* Insert your model definition here */
 
 global {
-	file plot_shp <- file("C:/Users/pc/Gama_Workspace/Field Experiment/includes/Shapefile/kiengiang.shp");
+	file plot_shp <- file("../includes/Shapefile/kiengiang.shp");
 	file res_file <- csv_file("../includes/Results/2017/res2017.csv", ",", true);
 	
 	map<int, list<float>> water_levels_cf;
@@ -26,16 +26,22 @@ global {
 	
 	int current_time_step <- 0;
 	int max_time_steps <- 100;
-	float max_water_level <- 100;
+	float max_water_level <- 100.0;
 	
 	list<int> cf_plots <- [2,4,5];
 	list<int> awd_plots <- [1, 3];
 	
 	list<float> cf_water_level_values <- [];
 	list<float> awd_water_level_values <- [];
+	list<float> cf_leaf_area_index_values <- [];
+	list<float> awd_leaf_area_index_values <- [];
+	float current_cf_LAI <- 0.0;
+	float current_awd_LAI <- 0.0;
 	
 	float current_cf_water_level <- 0.0;
 	float current_awd_water_level <- 0.0;
+	float current_average_temperature <- 25.0;
+	list<float> average_temp <- [];
 	float current_time <- 0.0;
 	
 	geometry shape <- envelope(plot_shp);
@@ -61,9 +67,13 @@ global {
 		int rerun_index <- headers index_of "RERUN_SET";
 		int time_index <- headers index_of "TIME";
 		int wl0_index <- headers index_of "WL0";
+		int LAI_index <- headers index_of "LAI";
+		int max_temp_index <- headers index_of "TMAX";
+		int min_temp_index <- headers index_of "TMIN";
 		
 		list<float> cf_time_values <- [];
 		list<float> awd_time_values <- [];
+		
 		
 		loop i from: 0 to: data.rows - 1 {
 			string rerun_value <- data[rerun_index, i];
@@ -71,10 +81,13 @@ global {
 			if (rerun_value = "1.0"){
 				add float(data[time_index, i]) to: cf_time_values;
 				add float(data[wl0_index, i]) to: cf_water_level_values;
+				add (float(data[min_temp_index, i])+float(data[min_temp_index, i]))/2 to: average_temp;
+				add float(data[LAI_index, i]) to: cf_leaf_area_index_values;
 			}
 			else if (rerun_value = "2.0"){
 				add float(data[time_index, i]) to: awd_time_values;
 				add float(data[wl0_index, i]) to: awd_water_level_values;
+				add float(data[LAI_index, i]) to: awd_leaf_area_index_values;	
 			}
 		}
 		
@@ -128,6 +141,11 @@ global {
 		int time_key <- int(time_steps[current_time_step]);
 		current_time <- time_steps[current_time_step];
 		
+		current_average_temperature <- average_temp[current_time_step];
+		
+		current_awd_LAI <- awd_leaf_area_index_values[current_time_step];
+		current_cf_LAI <- cf_leaf_area_index_values[current_time_step];
+		
 		if (water_levels_cf contains_key time_key) {
 			current_cf_water_level <- mean(water_levels_cf[time_key]);
 		}
@@ -179,16 +197,37 @@ species plot {
 	}
 }
 
+
+
 experiment demo type: gui {
+	float minimum_cycle_duration <- 0.1#s;
 	output synchronized: false{
+	layout horizontal([0::5000,vertical([1::5000,2::5000])::5000]) editors: false toolbars: false;
 		display map type: 2d {
 			species plot aspect: default;
 		}
-		display "Water Level Comparison" {
-			chart "Water Levels" type:series background: #white {
-				data "CF" value: current_cf_water_level color: #blue;
-				data "AWD" value: current_awd_water_level color: #red;
+		display "Water Level/Temperature" type: 2d{
+			chart "" type:series background: #white y_label: "Water level" y2_label: "Temperature"{
+				data "CF" value: current_cf_water_level color: #blue marker: false;
+				data "AWD" value: current_awd_water_level color: #red marker: false;
+				data "Avg. Temperature" value: current_average_temperature use_second_y_axis: true 
+					color: #orange marker: false style: step;
+			}
+		}
+		display "Leaf Area Index" type: 2d{
+			chart "Leaf Area Index" type:series background: #white {
+				data "CF" value: current_cf_LAI color: #blue marker: false;
+				data "AWD" value: current_awd_LAI color: #red marker: false;
 			}
 		}
 	}
 }
+
+experiment truc {
+	
+}
+
+
+
+
+
