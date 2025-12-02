@@ -49,7 +49,7 @@ I compared double-rice season (Winter-Spring and Summer-Autumn) with 2 water man
 
 # Simulation platform
 ## ORYZA
-Version 3.5
+Version 3.5 <br />
 A platform that simulate rice crop growth based on inputs like weather, soil type, management practices.
 ### Preparing the ORYZA Simulation inputs
 
@@ -131,8 +131,8 @@ Select your scenario by choose the corresponding path. I've created 3 folders fo
 - Scenario 3: ```\oryzatrain\scene3\CF_s3.rer```
 		```\oryzatrain\scene3\AWD_s3.rer```
 
-For example, if you want to simulate **CF** practice when **the temperature rises 2℃**, you will set path of that scenario and practice control file (```CONTROL.DAT```). 
-This file used to control the simulation of ORYZA (Input/Output file path and options for output display)
+For example, if you want to simulate **CF** practice when **the temperature rises 2℃**, you will set path of that scenario and practice control file at ```FILEIR``` in (```CONTROL.DAT```). 
+This file used to control the simulation of ORYZA (Input/Output file path and option for output display)
 ```
 	CONTROLFILE = 'CONTROL.DAT'
 	FILEON = '.\res.dat'             ! Output file
@@ -185,6 +185,9 @@ Here's the list of variables in **res.dat** and **op.dat** files
 | S_CH4C        | kg C/ha | Seasonally accumulative CH4 emission                    |
 | DAE           |         | Days after emergence                                    |
 
+
+For more information you can find the ORYZA manual in ```oryzatrain``` folder and you can check this [sheet table](https://docs.google.com/spreadsheets/d/1Im6XVrKtR67UFT2nrhxxbTlJbc4WDTFpVXvmvhssfOI/edit?usp=sharing) which contains input data and parameters in ORYZA
+
 ### GAMA
 
 After running ORYZA simulation, I use GAMA to visualize the results from ORYZA and also as an input for the farmer decision making model.
@@ -219,7 +222,7 @@ action load_data {
 2. ```daily_result.gaml```
 This GAMA model will visualize the daily result (res file) and you can choose 2 scenarios to compare the water level, Leaf Area Index (LAI), emission in a selected season together. 
 There are 2 experiments: water_level, emission 
-![](https://github.com/danghh333/gama-oryza/blob/main/images/Screenshot%202025-10-24%20153934.png)\
+![](https://github.com/danghh333/gama-oryza/blob/main/images/Screenshot%202025-10-24%20153934.png)
     1. **water_level**\
 		This experiment contains plot map to visualize the water level for 2 practices. It also has 2 charts to show water level and LAI\
 		![](https://github.com/danghh333/gama-oryza/blob/main/images/Screenshot%202025-10-24%20155308.png)
